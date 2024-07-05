@@ -14,7 +14,7 @@ func New[T any](capacity int) *Cache[T] {
 	}
 }
 
-// Removes any value associated to the key. Cache().Has(key) will return false afterwards.
+// Removes any value associated to the key.
 func (c *Cache[T]) Delete(key string) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
