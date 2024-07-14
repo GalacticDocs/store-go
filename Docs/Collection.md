@@ -30,7 +30,7 @@ func main() {
 >
 > Type **{bool}**
 
-## [Delete](https://github.com/GalacticDocs/store-go/blob/main/collection/collection.go#L38)
+## [.Delete(key)](https://github.com/GalacticDocs/store-go/blob/main/collection/collection.go#L38)
 > Deletes a key from the Collection.
 > | Param | Type | Description |
 > | --- | --- | --- |
