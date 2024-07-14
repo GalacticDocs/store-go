@@ -1,6 +1,7 @@
 package map_store
 
 import (
+	"sort"
 	"sync"
 
 	storing_errors "github.com/GalacticDocs/store-go/errors"
@@ -106,6 +107,36 @@ func (m *IMap) Size() int {
 	})
 
 	return size
+}
+
+func (m *IMap) Sort(fn func(a any, b any) bool) *IMap {
+	// Extract key-value pairs from the sync.Map
+    keyValuePairs := make([][2]any, 0)
+    m.store.Range(func(key, value any) bool {
+        keyValuePairs = append(keyValuePairs, [2]any{key, value})
+        return true
+    })
+
+    // Sort the key-value pairs based on the comparison function
+    sort.Slice(keyValuePairs, func(i, j int) bool {
+        firstVal := keyValuePairs[i][1]
+		secondVal := keyValuePairs[j][1]
+
+		return fn(firstVal, secondVal)
+    })
+
+	// Clear the original map
+    m.store.Range(func(key, _ any) bool {
+        m.store.Delete(key)
+        return true
+    })
+
+	// Re-add the sorted key-value pairs to the original map
+    for _, pair := range keyValuePairs {
+        m.store.Store(pair[0], pair[1])
+    }
+
+    return m
 }
 
 // Returns all the values as an array.
