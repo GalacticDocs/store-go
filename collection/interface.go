@@ -24,3 +24,5 @@ type IMapTransformer func(value any, key string, index int, collection *ICollect
 type ISomeFunc func(key string, value any, collection *ICollection) bool
 
 type ISweepFunc func(key string, value any, collection *ICollection) bool
+
+type IEveryFunc func(value any, key string, collection *ICollection) bool

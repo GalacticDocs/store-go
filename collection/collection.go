@@ -46,6 +46,19 @@ func (c *ICollection) Delete(key string) bool {
 	return true
 }
 
+func (c *ICollection) Every(fn IEveryFunc) bool {
+	var result bool = true 
+
+	c.store.Range(func(key, value any) bool {
+		if !fn(value, key.(string), c) {
+			result = false
+			return false
+		} else {
+			return false
+		}
+	})
+}
+
 // Exists returns a Boolean asserting whether a value has been associated to the key in the Collection or not.
 //
 // The Exists function takes 1 parameter:
