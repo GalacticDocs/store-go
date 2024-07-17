@@ -30,10 +30,10 @@ func main() {
 >
 > Returns **{bool}**
 
-## [.Clone()]
+## [.Clone()](https://github.com/GalacticDocs/store-go/blob/main/collection/collection.go#L33)
 > Clones the Collection and returns it.
 >
-> Returns **{[Collection](https://github.com/GalacticDocs/store-go/blob/main/collection/collection.go)}**
+> Returns **{[Collection](https://github.com/GalacticDocs/store-go/blob/main/Docs/Collection.md)}**
 
 ## [.Delete(key)](https://github.com/GalacticDocs/store-go/blob/main/collection/collection.go#L38)
 > Deletes a key from the Collection.
