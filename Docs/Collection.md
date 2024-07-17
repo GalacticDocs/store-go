@@ -22,13 +22,18 @@ func main() {
 ## [.Size()](https://github.com/GalacticDocs/store-go/blob/main/collection/collection.go#L)
 > Amount of keys/values in the Collection.
 >
-> Type **{int}**
+> Returns **{int}**
 
 # Methods
-## [.Clear()](https://github.com/GalacticDocs/store-go/blob/main/collection/collection.go#L21)
+## [.Clear()](https://github.com/GalacticDocs/store-go/blob/main/collection/collection.go#L24)
 > Removes all the items from the Collection.
 >
-> Type **{bool}**
+> Returns **{bool}**
+
+## [.Clone()]
+> Clones the Collection and returns it.
+>
+> Returns **{[Collection](https://github.com/GalacticDocs/store-go/blob/main/collection/collection.go)}**
 
 ## [.Delete(key)](https://github.com/GalacticDocs/store-go/blob/main/collection/collection.go#L38)
 > Deletes a key from the Collection.

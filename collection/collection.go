@@ -1,6 +1,9 @@
 package collection_store
 
 import (
+	"bytes"
+	"encoding/gob"
+	"sort"
 	"sync"
 
 	storing_errors "github.com/GalacticDocs/store-go/errors"
@@ -27,6 +30,38 @@ func (c *ICollection) Clear() bool {
 	return true
 }
 
+func (c *ICollection) Clone() *ICollection {
+	var buf bytes.Buffer
+	enc := gob.NewEncoder(&buf)
+	dec := gob.NewDecoder(&buf)
+
+	// Convert sync.Map to a regular map for serialization
+	tempMap := make(map[string]interface{})
+	c.store.Range(func(key, value interface{}) bool {
+		tempMap[key.(string)] = value
+		return true
+	})
+
+	// Serialize the map
+	if err := enc.Encode(tempMap); err != nil {
+		panic(err)
+	}
+
+	// Deserialize into a new map
+	var clonedMap map[string]interface{}
+	if err := dec.Decode(&clonedMap); err != nil {
+		panic(err)
+	}
+
+	// Create a new ICollection and populate it with the cloned map
+	clonedCollection := New()
+	for key, value := range clonedMap {
+		clonedCollection.Set(key, value)
+	}
+
+	return clonedCollection
+}
+
 // Delete removes any value associated to the key from the Collection.
 //
 // The Delete function takes 1 parameter:
@@ -46,17 +81,46 @@ func (c *ICollection) Delete(key string) bool {
 	return true
 }
 
+func (c *ICollection) Difference(against *ICollection) *ICollection {
+	oldCol := c.Filter(func(value any, key string, collection *ICollection) bool {
+		return !c.Has(key)
+	})
+	newCol := c.Filter(func(value any, key string, collection *ICollection) bool {
+		return !against.Has(key)
+	})
+
+	return newCol.Implement(oldCol)
+}
+
+func (c *ICollection) Each(fn IEachFunc) *ICollection {
+	c.store.Range(func(key, value any) bool {
+		fn(value, key.(string), c)
+
+		return true
+	})
+
+	return c
+}
+
 func (c *ICollection) Every(fn IEveryFunc) bool {
-	var result bool = true 
+	var result bool = true
 
 	c.store.Range(func(key, value any) bool {
 		if !fn(value, key.(string), c) {
 			result = false
 			return false
 		} else {
-			return false
+			return true
 		}
 	})
+
+	return result
+}
+
+func (c *ICollection) Execute(fn IExecuteFunc) *ICollection {
+	fn(c, c.Size())
+
+	return c
 }
 
 // Exists returns a Boolean asserting whether a value has been associated to the key in the Collection or not.
@@ -107,7 +171,7 @@ func (c *ICollection) Filter(fn IFilterFunc) *ICollection {
 	var result = New()
 
 	c.store.Range(func(key, value any) bool {
-		if fn(key.(string), value, c) {
+		if fn(value, key.(string), c) {
 			result.store.Store(key, value)
 		}
 
@@ -135,7 +199,7 @@ func (c *ICollection) Filter(fn IFilterFunc) *ICollection {
 func (c *ICollection) Find(fn IFindFunc) any {
 	var result any
 	c.store.Range(func(key, value any) bool {
-		if fn(key.(string), value, c) {
+		if fn(value, key.(string), c) {
 			result = value
 			return true
 		} else {
@@ -211,6 +275,23 @@ func (c *ICollection) Has(key string) bool {
 	return loaded
 }
 
+func (c *ICollection) Implement(collections ...*ICollection) *ICollection {
+	for _, collection := range collections {
+		collection.store.Range(func(key, value any) bool {
+			c.store.Store(key, value)
+			return true
+		})
+	}
+
+	return c
+}
+
+func (c *ICollection) Intersect(secondary *ICollection) *ICollection {
+	return c.Filter(func(value any, key string, collection *ICollection) bool {
+		return secondary.Has(key)
+	})
+}
+
 // Iterator returns a map containing the elements of the ICollection.
 //
 // Returns a regular map which can be used to iterate over.
@@ -268,6 +349,20 @@ func (c *ICollection) Map(fn IMapTransformer) []any {
 	})
 
 	return result
+}
+
+func (c *ICollection) Merge(collections ...*ICollection) *ICollection {
+	mergedCollection := c.Clone()
+
+	for _, collection := range collections {
+		collectionClone := collection.Clone()
+		collectionClone.store.Range(func(key, value any) bool {
+			mergedCollection.Set(key.(string), value)
+			return true
+		})
+	}
+
+	return mergedCollection
 }
 
 // Reduce applies a function against an accumulator and each value of the Collection (from left-to-right) to reduce it to a single value.
@@ -359,9 +454,9 @@ func (c *ICollection) Size() int {
 // Returns a Boolean asserting whether at least one element in the Collection satisfies the given function.
 func (c *ICollection) Some(fn ISomeFunc) bool {
 	var result bool = false
-	
+
 	c.store.Range(func(key, value any) bool {
-		result = fn(key.(string), value, c)
+		result = fn(value, key.(string), c)
 		return true
 	})
 
@@ -369,8 +464,35 @@ func (c *ICollection) Some(fn ISomeFunc) bool {
 }
 
 // Sorts the items in the collection
-func (c *ICollection) Sort(fn func(a any, b any)) *ICollection {
-	//
+func (c *ICollection) Sort(fn ISortFunc) *ICollection {
+	// Extract key-value pairs from the sync.Map
+	keyValuePairs := make([][2]any, 0)
+	c.store.Range(func(key, value any) bool {
+		keyValuePairs = append(keyValuePairs, [2]any{key, value})
+
+		return true
+	})
+
+	// Sort the key-value pairs based on the comparison function
+	sort.Slice(keyValuePairs, func(i, j int) bool {
+		firstVal := keyValuePairs[i][1]
+		secondVal := keyValuePairs[j][1]
+
+		return fn(firstVal, secondVal)
+	})
+
+	// Clear the original map
+	c.store.Range(func(key, _ any) bool {
+		c.store.Delete(key)
+		return true
+	})
+
+	// Re-add the sorted key-value pairs to the original map
+	for _, pair := range keyValuePairs {
+		c.store.Store(pair[0], pair[1])
+	}
+
+	return c
 }
 
 // Sweep removes all elements in the Collection that match the given function.
@@ -390,7 +512,7 @@ func (c *ICollection) Sweep(fn ISweepFunc) int {
 	previousSize := c.Size()
 
 	c.store.Range(func(key, value any) bool {
-		if fn(key.(string), value, c) {
+		if fn(value, key.(string), c) {
 			c.store.Delete(key)
 		}
 
