@@ -33,7 +33,7 @@ func main() {
 ## [.Clone()](https://github.com/GalacticDocs/store-go/blob/main/collection/collection.go#L36)
 > Clones the Collection and returns it.
 >
-> Returns **{[Collection](https://github.com/GalacticDocs/store-go/blob/main/Docs/Collection.md)}**
+> Returns **{[Collection](https://github.com/GalacticDocs/store-go/blob/main/Docs/Collection.md#L1)}**
 
 ## [.Delete(key)](https://github.com/GalacticDocs/store-go/blob/main/collection/collection.go#L76)
 > Deletes a key from the Collection.
