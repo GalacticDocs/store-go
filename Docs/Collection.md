@@ -41,10 +41,52 @@ func main() {
 > | --- | --- | --- |
 > | key | string | The key to delete from the Collection. |
 >
-> Type **{bool}**
+> Returns **{bool}**
 
 ## [.Difference(against)](https://github.com/GalacticDocs/store-go/blob/main/collection/collection.go#L95)
-> Returns a new Collection containing only the properties ones that don't exist in against
+> Returns a new Collection containing only the properties ones that don't exist in against.
 > | Param | Type | Description |
 > | --- | --- | --- |
-> | against | [Collection](https://github.com/GalacticDocs/store-go/blob/main/Docs/Collection.md) | The collection to compare against |
+> | against | [Collection](https://github.com/GalacticDocs/store-go/blob/main/Docs/Collection.md) | The collection to compare against. |
+>
+> Returns **{[Collection](https://github.com/GalacticDocs/store-go/blob/main/Docs/Collection.md)}**
+
+## [.Each(fn)](https://github.com/GalacticDocs/store-go/blob/main/collection/collection.go#L119)
+> Runs the given function over every key-value pair in the collection.
+> | Param | Type | Description |
+> | --- | --- | --- |
+> | fn | [IEachFunc](https://github.com/GalacticDocs/store-go/blob/main/collection/interface.go#L32) | The function to execute. |
+>
+> Returns **{[Collection](https://github.com/GalacticDocs/store-go/blob/main/Docs/Collection.md)}**
+
+## [.Every(fn)](https://github.com/GalacticDocs/store-go/blob/main/collection/collection.go#L143)
+> Runs the given function over the entire collection on every element.
+> | Param | Type | Description |
+> | --- | --- | --- |
+> | fn | [IEveryFunc](https://github.com/GalacticDocs/store-go/blob/main/collection/interface.go#L28) | The function to execute.
+>
+> Returns **{bool}**
+
+## [.Execute(fn)](https://github.com/GalacticDocs/store-go/blob/main/collection/collection.go#L170)
+> Executes a function over the collection. (different from .Every() & .Each())
+> | Param | Type | Description |
+> | --- | --- | --- |
+> | fn | [IExecuteFunc](https://github.com/GalacticDocs/store-go/blob/main/collection/interface.go#L30) | The function to execute.
+>
+> Returns **{[Collection](https://github.com/GalacticDocs/store-go/blob/main/Docs/Collection.md)}**
+
+## [.Exist(key)](https://github.com/GalacticDocs/store-go/blob/main/collection/collection.go#L184)
+> Returns whether or not the provided key exists in the collection.
+> | Param | Type | Description |
+> | --- | --- | --- |
+> | key | string | The key to search for. |
+>
+> Returns **{bool}**
+
+## [.Fetch(key)](https://github.com/GalacticDocs/store-go/blob/main/collection/collection.go#L198)
+> Returns the value associated with the provided key, if non could be found, it returns nil.
+> | Param | Type | Description |
+> | --- | --- | --- |
+> | key | string | The key to fetch. |
+>
+> Returns **{any}**
