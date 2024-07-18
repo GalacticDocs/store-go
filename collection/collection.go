@@ -30,6 +30,9 @@ func (c *ICollection) Clear() bool {
 	return true
 }
 
+// Clone creates a new Collection instance and populates it with the elements of the current Collection.
+//
+// Returns a new Collection instance.
 func (c *ICollection) Clone() *ICollection {
 	var buf bytes.Buffer
 	enc := gob.NewEncoder(&buf)
@@ -81,6 +84,14 @@ func (c *ICollection) Delete(key string) bool {
 	return true
 }
 
+// Difference returns a new Collection containing the elements of the current Collection that are not in the given Collection.
+//
+// The Difference function takes 1 parameter:
+//   - against: a Collection to compare the current Collection against.
+//
+// The first parameter (against) represents a pointer to a Collection.
+//
+// Returns a new Collection containing the elements of the current Collection that are not in the given Collection.
 func (c *ICollection) Difference(against *ICollection) *ICollection {
 	oldCol := c.Filter(func(value any, key string, collection *ICollection) bool {
 		return !c.Has(key)
@@ -92,6 +103,19 @@ func (c *ICollection) Difference(against *ICollection) *ICollection {
 	return newCol.Implement(oldCol)
 }
 
+// Each applies the given function to each key-value pair in the Collection.
+//
+// The Each function takes 1 parameter:
+//   - fn: a function to be applied to each key-value pair in the Collection.
+//
+// The first parameter (fn) represents a function to be applied to each key-value pair in the Collection.
+//
+// The fn function takes three parameters:
+//   - key: a string representing the key of the key-value pair.
+//   - value: the value associated with the key.
+//   - collection: a pointer to the Collection being filtered.
+//
+// Returns the current Collection.
 func (c *ICollection) Each(fn IEachFunc) *ICollection {
 	c.store.Range(func(key, value any) bool {
 		fn(value, key.(string), c)
@@ -102,6 +126,20 @@ func (c *ICollection) Each(fn IEachFunc) *ICollection {
 	return c
 }
 
+// Every applies the given function to each key-value pair in the Collection and returns a boolean indicating whether
+// all key-value pairs have been processed or not.
+//
+// The Every function takes 1 parameter:
+//   - fn: a function to be applied to each key-value pair in the Collection.
+//
+// The first parameter (fn) represents a function to be applied to each key-value pair in the Collection.
+//
+// The fn function takes three parameters:
+//   - key: a string representing the key of the key-value pair.
+//   - value: the value associated with the key.
+//   - collection: a pointer to the Collection being filtered.
+//
+// Returns a boolean indicating whether all key-value pairs have been processed or not.
 func (c *ICollection) Every(fn IEveryFunc) bool {
 	var result bool = true
 
@@ -117,6 +155,18 @@ func (c *ICollection) Every(fn IEveryFunc) bool {
 	return result
 }
 
+// Execute applies the given function to the Collection and returns the Collection.
+//
+// The Execute function takes 1 parameter:
+//   - fn: a function to be applied to the Collection.
+//
+// The first parameter (fn) represents a function to be applied to the Collection.
+//
+// The fn function takes two parameters:
+//   - collection: a pointer to the Collection being filtered.
+//   - size: an integer representing the size of the Collection.
+//
+// Returns the current Collection.
 func (c *ICollection) Execute(fn IExecuteFunc) *ICollection {
 	fn(c, c.Size())
 
@@ -275,6 +325,14 @@ func (c *ICollection) Has(key string) bool {
 	return loaded
 }
 
+// Implement implements multiple collections into one.
+//
+// The Implement function takes 1 parameter:
+//   - collections: a slice of Collections.
+//
+// The first parameter represents a slice of pointers to ICollection.
+//
+// Returns a pointer to the new ICollection.
 func (c *ICollection) Implement(collections ...*ICollection) *ICollection {
 	for _, collection := range collections {
 		collection.store.Range(func(key, value any) bool {
@@ -286,6 +344,14 @@ func (c *ICollection) Implement(collections ...*ICollection) *ICollection {
 	return c
 }
 
+// Intersect returns a new Collection containing the intersection of the current Collection and the given Collection.
+//
+// The Intersect function takes 1 parameter:
+//   - secondary: a Collection.
+//
+// The first parameter (secondary) represents a pointer to a Collection.
+//
+// Returns a new Collection containing the intersection of the current Collection and the given Collection.
 func (c *ICollection) Intersect(secondary *ICollection) *ICollection {
 	return c.Filter(func(value any, key string, collection *ICollection) bool {
 		return secondary.Has(key)
@@ -351,6 +417,14 @@ func (c *ICollection) Map(fn IMapTransformer) []any {
 	return result
 }
 
+// Merge merges multiple collections into one.
+//
+// The Merge function takes 1 parameter:
+//   - collections: a slice of Collections.
+//
+// The first parameter represents a slice of pointers to ICollection.
+//
+// Returns a pointer to the new ICollection.
 func (c *ICollection) Merge(collections ...*ICollection) *ICollection {
 	mergedCollection := c.Clone()
 
@@ -463,7 +537,18 @@ func (c *ICollection) Some(fn ISomeFunc) bool {
 	return result
 }
 
-// Sorts the items in the collection
+// Sort sorts the elements in the Collection.
+//
+// The Sort function takes 1 parameter:
+//   - fn: a function that compares two elements.
+//
+// The first parameter represents a function that compares two elements.
+//
+// The fn function takes two parameters:
+//   - first: the first element to compare.
+//   - second: the second element to compare.
+//
+// Returns a pointer to the Collection.
 func (c *ICollection) Sort(fn ISortFunc) *ICollection {
 	// Extract key-value pairs from the sync.Map
 	keyValuePairs := make([][2]any, 0)

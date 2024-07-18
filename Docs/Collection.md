@@ -30,15 +30,21 @@ func main() {
 >
 > Returns **{bool}**
 
-## [.Clone()](https://github.com/GalacticDocs/store-go/blob/main/collection/collection.go#L33)
+## [.Clone()](https://github.com/GalacticDocs/store-go/blob/main/collection/collection.go#L36)
 > Clones the Collection and returns it.
 >
 > Returns **{[Collection](https://github.com/GalacticDocs/store-go/blob/main/Docs/Collection.md)}**
 
-## [.Delete(key)](https://github.com/GalacticDocs/store-go/blob/main/collection/collection.go#L38)
+## [.Delete(key)](https://github.com/GalacticDocs/store-go/blob/main/collection/collection.go#L76)
 > Deletes a key from the Collection.
 > | Param | Type | Description |
 > | --- | --- | --- |
 > | key | string | The key to delete from the Collection. |
 >
 > Type **{bool}**
+
+## [.Difference(against)](https://github.com/GalacticDocs/store-go/blob/main/collection/collection.go#L95)
+> Returns a new Collection containing only the properties ones that don't exist in against
+> | Param | Type | Description |
+> | --- | --- | --- |
+> | against | [Collection](https://github.com/GalacticDocs/store-go/blob/main/Docs/Collection.md) | The collection to compare against |
