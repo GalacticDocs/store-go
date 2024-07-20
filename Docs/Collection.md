@@ -1,6 +1,6 @@
 # Collection
 
-* [Collection](https://github.com/GalacticDocs/store-go/blob/main/Docs/Collection.md)
+* [Collection](https://github.com/GalacticDocs/store-go/blob/main/Docs/Collection.md#top)
 
 **Extensions**
 * [Cache](https://github.com/GalacticDocs/store-go/blob/main/Docs/Cache.md)
@@ -33,7 +33,7 @@ func main() {
 ## [.Clone()](https://github.com/GalacticDocs/store-go/blob/main/collection/collection.go#L36)
 > Clones the Collection and returns it.
 >
-> Returns **{[Collection](https://github.com/GalacticDocs/store-go/blob/main/Docs/Collection.md#L1)}**
+> Returns **{[Collection](https://github.com/GalacticDocs/store-go/blob/main/Docs/Collection.md#top)}**
 
 ## [.Delete(key)](https://github.com/GalacticDocs/store-go/blob/main/collection/collection.go#L76)
 > Deletes a key from the Collection.
@@ -49,7 +49,7 @@ func main() {
 > | --- | --- | --- |
 > | against | [Collection](https://github.com/GalacticDocs/store-go/blob/main/Docs/Collection.md) | The collection to compare against. |
 >
-> Returns **{[Collection](https://github.com/GalacticDocs/store-go/blob/main/Docs/Collection.md)}**
+> Returns **{[Collection](https://github.com/GalacticDocs/store-go/blob/main/Docs/Collection.md#top)}**
 
 ## [.Each(fn)](https://github.com/GalacticDocs/store-go/blob/main/collection/collection.go#L119)
 > Runs the given function over every key-value pair in the collection.
@@ -57,7 +57,7 @@ func main() {
 > | --- | --- | --- |
 > | fn | [IEachFunc](https://github.com/GalacticDocs/store-go/blob/main/collection/interface.go#L32) | The function to execute. |
 >
-> Returns **{[Collection](https://github.com/GalacticDocs/store-go/blob/main/Docs/Collection.md)}**
+> Returns **{[Collection](https://github.com/GalacticDocs/store-go/blob/main/Docs/Collection.md#top)}**
 
 ## [.Every(fn)](https://github.com/GalacticDocs/store-go/blob/main/collection/collection.go#L143)
 > Runs the given function over the entire collection on every element.
@@ -73,7 +73,7 @@ func main() {
 > | --- | --- | --- |
 > | fn | [IExecuteFunc](https://github.com/GalacticDocs/store-go/blob/main/collection/interface.go#L30) | The function to execute.
 >
-> Returns **{[Collection](https://github.com/GalacticDocs/store-go/blob/main/Docs/Collection.md)}**
+> Returns **{[Collection](https://github.com/GalacticDocs/store-go/blob/main/Docs/Collection.md#top)}**
 
 ## [.Exist(key)](https://github.com/GalacticDocs/store-go/blob/main/collection/collection.go#L184)
 > Returns whether or not the provided key exists in the collection.
@@ -90,3 +90,11 @@ func main() {
 > | key | string | The key to fetch. |
 >
 > Returns **{any}**
+
+## [.Filter(fn)](https://github.com/GalacticDocs/store-go/blob/main/collection/collection.go#L220)
+> Returns a collection that has been filtered by said fn function.
+> | Param | Type | Description |
+> | --- | --- | --- |
+> | fn | [IFilterFunc](https://github.com/GalacticDocs/store-go/blob/main/collection/interface.go#L16) | The function to execute. |
+>
+> Returns **{[Collection](https://github.com/GalacticDocs/store-go/blob/main/Docs/Collection.md#top)}**
