@@ -17,9 +17,9 @@ type IFilterFunc func(value any, key string, collection *ICollection) bool
 
 type IFindFunc func(value any, key string, collection *ICollection) bool
 
-type IReduceTransformer func(accumulator any, value any, key string, collection *ICollection) any
+type IReduceFunc func(accumulator any, value any, key string, collection *ICollection) any
 
-type IMapTransformer func(value any, key string, index int, collection *ICollection) any
+type IMapFunc func(value any, key string, index int, collection *ICollection) any
 
 type ISomeFunc func(value any, key string, collection *ICollection) bool
 

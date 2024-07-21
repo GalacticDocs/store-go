@@ -404,7 +404,7 @@ func (c *ICollection) Last() any {
 //   - collection: a pointer to the Collection being mapped.
 //
 // Returns an array of the results.
-func (c *ICollection) Map(fn IMapTransformer) []any {
+func (c *ICollection) Map(fn IMapFunc) []any {
 	var result []any
 	var arrayIteration int
 
@@ -457,7 +457,7 @@ func (c *ICollection) Merge(collections ...*ICollection) *ICollection {
 //   - collection: a pointer to the Collection being reduced.
 //
 // Returns the accumulator value.
-func (c *ICollection) Reduce(fn IReduceTransformer, initialAccumulator any) any {
+func (c *ICollection) Reduce(fn IReduceFunc, initialAccumulator any) any {
 	var accumulator any
 	var isFirstItem = true
 
