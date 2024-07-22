@@ -4,5 +4,6 @@ A data manager made easier for GO(lang), including:
 - Collection
 - Set
 - Cache
-- ActiveCache
+- LiveCache
 - DataDock
+- Manager
