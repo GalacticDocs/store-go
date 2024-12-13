@@ -59,6 +59,25 @@ func (m *IMap) Fetch(key string) any {
 	return data
 }
 
+// First searches the first value in the map.
+// Returns the first value in the map.
+func (m *IMap) First() any {
+	var result any
+
+	m.store.Range(func(key, value any) bool {
+		result = value
+		return false
+	})
+
+	return result
+}
+
+// Get retrieves the value associated with the given key from the Map.
+// It returns the value if found, or nil if no value is associated with the key.
+func (m *IMap) Get(key string) any {
+	return m.Fetch(key)
+}
+
 // Returns a Boolean asserting whether a value has been associated to the key in the Map or not.
 func (m *IMap) Has(key string) bool {
 	_, loaded := m.store.Load(key)
