@@ -24,6 +24,6 @@ func Map() *map_storage.IMap {
 	return map_storage.Map()
 }
 
-func Collection() *collection_storage {
+func Collection() *collection_storage.ICollection {
 	return collection_storage.New()
 }
